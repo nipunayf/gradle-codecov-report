@@ -49,13 +49,8 @@ task jacocoRootReport(type: JacocoReport) {
     dependsOn = subprojects.test
 
     // Gather execution data from all subprojects that actually have tests
-    def executionDataFiles = fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec").files
-    if (executionDataFiles.isEmpty()) {
-        // Create empty execution data if no tests exist
-        executionData = files()
-    } else {
-        executionData = executionDataFiles
-    }
+    def executionDataFiles = fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+    executionData = executionDataFiles
 
     // Add source files from all subprojects
     subprojects.each {
