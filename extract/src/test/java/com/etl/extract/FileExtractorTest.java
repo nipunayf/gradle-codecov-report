@@ -3,7 +3,9 @@ package com.etl.extract;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,8 +26,27 @@ public class FileExtractorTest {
     @Before
     public void setUp() {
         extractor = new FileExtractor();
-        // Get the path to test resources
-        testResourcesPath = "extract/src/test/resources/";
+        // Get the path to test resources from classpath
+        URL resourceUrl = getClass().getClassLoader().getResource("");
+        if (resourceUrl != null) {
+            testResourcesPath = new File(resourceUrl.getFile()).getAbsolutePath() + File.separator;
+        } else {
+            testResourcesPath = "";
+        }
+    }
+
+    /**
+     * Helper method to get the full path to a test resource file.
+     *
+     * @param fileName the name of the resource file
+     * @return the absolute path to the resource file
+     */
+    private String getResourcePath(String fileName) {
+        URL resource = getClass().getClassLoader().getResource(fileName);
+        if (resource == null) {
+            throw new RuntimeException("Resource not found: " + fileName);
+        }
+        return new File(resource.getFile()).getAbsolutePath();
     }
 
     /**
@@ -33,7 +54,7 @@ public class FileExtractorTest {
      */
     @Test
     public void testExtractFromFile_NormalData_ReturnsCorrectRecords() throws IOException {
-        String filePath = testResourcesPath + "normal-data.csv";
+        String filePath = getResourcePath("normal-data.csv");
 
         List<String[]> records = extractor.extractFromFile(filePath);
 
@@ -64,7 +85,7 @@ public class FileExtractorTest {
      */
     @Test
     public void testExtractFromFile_EmptyFile_ReturnsEmptyList() throws IOException {
-        String filePath = testResourcesPath + "empty-file.csv";
+        String filePath = getResourcePath("empty-file.csv");
 
         List<String[]> records = extractor.extractFromFile(filePath);
 
@@ -78,7 +99,7 @@ public class FileExtractorTest {
      */
     @Test
     public void testExtractFromFile_FileWithEmptyLines_SkipsEmptyLines() throws IOException {
-        String filePath = testResourcesPath + "file-with-empty-lines.csv";
+        String filePath = getResourcePath("file-with-empty-lines.csv");
 
         List<String[]> records = extractor.extractFromFile(filePath);
 
@@ -96,7 +117,7 @@ public class FileExtractorTest {
      */
     @Test
     public void testExtractFromFile_SingleField_ReturnsCorrectRecords() throws IOException {
-        String filePath = testResourcesPath + "single-field.csv";
+        String filePath = getResourcePath("single-field.csv");
 
         List<String[]> records = extractor.extractFromFile(filePath);
 
@@ -118,7 +139,7 @@ public class FileExtractorTest {
      */
     @Test
     public void testExtractFromFile_SingleRecord_ReturnsOneRecord() throws IOException {
-        String filePath = testResourcesPath + "single-record.csv";
+        String filePath = getResourcePath("single-record.csv");
 
         List<String[]> records = extractor.extractFromFile(filePath);
 
@@ -137,7 +158,7 @@ public class FileExtractorTest {
      */
     @Test(expected = IOException.class)
     public void testExtractFromFile_NonExistentFile_ThrowsIOException() throws IOException {
-        String filePath = testResourcesPath + "non-existent-file.csv";
+        String filePath = "non-existent-file.csv";
 
         extractor.extractFromFile(filePath);
 
@@ -159,7 +180,7 @@ public class FileExtractorTest {
      */
     @Test
     public void testGetRecordCount_NormalData_ReturnsCorrectCount() throws IOException {
-        String filePath = testResourcesPath + "normal-data.csv";
+        String filePath = getResourcePath("normal-data.csv");
 
         int count = extractor.getRecordCount(filePath);
 
@@ -171,7 +192,7 @@ public class FileExtractorTest {
      */
     @Test
     public void testGetRecordCount_EmptyFile_ReturnsZero() throws IOException {
-        String filePath = testResourcesPath + "empty-file.csv";
+        String filePath = getResourcePath("empty-file.csv");
 
         int count = extractor.getRecordCount(filePath);
 
@@ -183,7 +204,7 @@ public class FileExtractorTest {
      */
     @Test
     public void testGetRecordCount_FileWithEmptyLines_ReturnsCorrectCount() throws IOException {
-        String filePath = testResourcesPath + "file-with-empty-lines.csv";
+        String filePath = getResourcePath("file-with-empty-lines.csv");
 
         int count = extractor.getRecordCount(filePath);
 
@@ -195,7 +216,7 @@ public class FileExtractorTest {
      */
     @Test
     public void testGetRecordCount_SingleRecord_ReturnsOne() throws IOException {
-        String filePath = testResourcesPath + "single-record.csv";
+        String filePath = getResourcePath("single-record.csv");
 
         int count = extractor.getRecordCount(filePath);
 
@@ -207,7 +228,7 @@ public class FileExtractorTest {
      */
     @Test(expected = IOException.class)
     public void testGetRecordCount_NonExistentFile_ThrowsIOException() throws IOException {
-        String filePath = testResourcesPath + "non-existent-file.csv";
+        String filePath = "non-existent-file.csv";
 
         extractor.getRecordCount(filePath);
 
@@ -219,7 +240,7 @@ public class FileExtractorTest {
      */
     @Test
     public void testExtractFromFile_MultipleCalls_ReturnsNewListEachTime() throws IOException {
-        String filePath = testResourcesPath + "normal-data.csv";
+        String filePath = getResourcePath("normal-data.csv");
 
         List<String[]> records1 = extractor.extractFromFile(filePath);
         List<String[]> records2 = extractor.extractFromFile(filePath);
@@ -238,7 +259,7 @@ public class FileExtractorTest {
         FileExtractor extractor1 = new FileExtractor();
         FileExtractor extractor2 = new FileExtractor();
 
-        String filePath = testResourcesPath + "normal-data.csv";
+        String filePath = getResourcePath("normal-data.csv");
 
         List<String[]> records1 = extractor1.extractFromFile(filePath);
         List<String[]> records2 = extractor2.extractFromFile(filePath);
