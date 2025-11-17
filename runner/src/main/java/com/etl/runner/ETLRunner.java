@@ -54,6 +54,16 @@ public class ETLRunner {
             int loadedCount = dbLoader.load(filteredData);
             System.out.println("Database now contains " + dbLoader.getRecordCount() + " records");
             System.out.println();
+
+            if (loadedCount > 100) {
+                System.out.println("Warning: Loaded record count exceeds 100!");
+            } else if (loadedCount < 10) {
+                System.out.println("Warning: Loaded record count is below 10!");
+            } else if (loadedCount == 0) {
+                System.out.println("Error: No records were loaded into the database!");
+            } else {
+                System.out.println("Loaded record count is within the expected range.");
+            }
             
             System.out.println("ETL Pipeline completed successfully!");
             
