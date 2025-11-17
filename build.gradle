@@ -48,8 +48,9 @@ subprojects {
 task jacocoRootReport(type: JacocoReport) {
     dependsOn = subprojects.test
 
-    // Gather execution data from all subprojects
-    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+    // Gather execution data from all subprojects that actually have tests
+    def executionDataFiles = fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+    executionData = executionDataFiles
 
     // Add source files from all subprojects
     subprojects.each {
@@ -62,6 +63,11 @@ task jacocoRootReport(type: JacocoReport) {
         html.required = true
         html.outputLocation = file("${buildDir}/reports/jacoco/test/html")
         csv.required = false
+    }
+
+    doFirst {
+        // Ensure the report directory exists
+        file("${buildDir}/reports/jacoco/test").mkdirs()
     }
 }
 

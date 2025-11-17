@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   coverage-report:
@@ -48,7 +49,8 @@ jobs:
         if: ${{ !cancelled() }}
         uses: codecov/codecov-action@v4
         with:
-          files: ./build/reports/jacoco/test/jacocoTestReport.xml
+          directory: ./build/reports/jacoco/test/
+          files: jacocoTestReport.xml
           flags: unittests
           name: codecov-coverage
           fail_ci_if_error: false
