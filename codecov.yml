@@ -26,6 +26,10 @@ coverage:
           - transform/src/main/java/
           - load/src/main/java/
           - runner/src/main/java/
+        # Ensure we check individual files in patches
+        changes:
+          target: auto
+          threshold: 1%
 
   # Precision for coverage percentages
   precision: 2
@@ -64,7 +68,7 @@ github_checks:
 # Flag configuration for separating test types
 flags:
   unittests:
-    carryforward: true
+    carryforward: false
     paths:
       - extract/src/main/java/
       - transform/src/main/java/
@@ -81,3 +85,9 @@ ignore:
   - "**/build/**"
   - "**/*.gradle"
   - "gradle/**"
+
+# Ensure we process all files
+codecov:
+  # Require coverage for all files, not just modified ones
+  require_base: true
+  require_head: true
