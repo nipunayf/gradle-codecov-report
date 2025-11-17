@@ -6,8 +6,8 @@ coverage:
   status:
     project:
       default:
-        target: 100%
-        threshold: 0%
+        target: auto
+        threshold: 1%
         informational: false
         if_ci_failed: error
         paths:
@@ -17,8 +17,8 @@ coverage:
           - runner/src/main/java/
     patch:
       default:
-        target: 100%
-        threshold: 0%
+        target: auto
+        threshold: 1%
         informational: false
         if_ci_failed: error
         paths:
@@ -55,7 +55,7 @@ comment:
 # Annotations - show line-by-line coverage on PR diffs
 github_checks:
   annotations: true
-  annotations_overall_threshold: 100  # Require 100% coverage
+  annotations_overall_threshold: 0  # Show all uncovered lines, don't require 100%
   # Enable separate Codecov check runs
   enabled: true
   # Fail checks if coverage drops

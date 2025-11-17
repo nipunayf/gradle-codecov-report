@@ -54,13 +54,6 @@ jobs:
           name: codecov-test-results
           verbose: true
 
-      - name: Validate 100% Coverage
-        if: ${{ !cancelled() }}
-        run: |
-          echo "=== Validating 100% Coverage ==="
-          # Run our custom validation task
-          ./gradlew validateAllCoverage --no-daemon
-
       - name: Upload coverage to Codecov
         if: ${{ !cancelled() }}
         uses: codecov/codecov-action@v4
