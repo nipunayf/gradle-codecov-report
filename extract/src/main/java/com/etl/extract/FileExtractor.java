@@ -33,6 +33,10 @@ public class FileExtractor {
                 records.add(values);
             }
         }
+
+        if (records.isEmpty()) {
+            System.out.println("No records found in the file: " + filePath);
+        }
         
         return records;
     }
