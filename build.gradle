@@ -1,11 +1,12 @@
 plugins {
     id 'java'
+    id 'jacoco'
 }
 
 allprojects {
     group = 'com.etl.pipeline'
     version = '1.0-SNAPSHOT'
-    
+
     repositories {
         mavenCentral()
     }
@@ -13,13 +14,60 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
-    
+    apply plugin: 'jacoco'
+
     java {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    
+
+    jacoco {
+        toolVersion = "0.8.11"
+    }
+
     dependencies {
         testImplementation 'junit:junit:4.13.2'
     }
+
+    // Generate JaCoCo coverage report after tests
+    test {
+        finalizedBy jacocoTestReport
+    }
+
+    jacocoTestReport {
+        dependsOn test
+        reports {
+            xml.required = true
+            html.required = true
+            csv.required = false
+        }
+    }
+}
+
+// Aggregated coverage report for all subprojects
+task jacocoRootReport(type: JacocoReport) {
+    dependsOn = subprojects.test
+
+    // Gather execution data from all subprojects
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+    // Add source files from all subprojects
+    subprojects.each {
+        sourceSets it.sourceSets.main
+    }
+
+    reports {
+        xml.required = true
+        xml.outputLocation = file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        html.required = true
+        html.outputLocation = file("${buildDir}/reports/jacoco/test/html")
+        csv.required = false
+    }
+}
+
+// Task to run tests and generate aggregated coverage report
+task testCoverage {
+    group = 'verification'
+    description = 'Runs tests for all modules and generates aggregated coverage report'
+    dependsOn subprojects.test, jacocoRootReport
 }
