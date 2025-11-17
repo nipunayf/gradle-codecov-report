@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   test-and-coverage:
@@ -19,6 +20,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Fetch all history for accurate coverage comparison
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Set up JDK 11
         uses: actions/setup-java@v4
@@ -34,8 +36,48 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Fetch base branch for comparison
+        run: |
+          git fetch origin ${{ github.base_ref }} --depth=1
+          echo "Base branch: ${{ github.base_ref }}"
+          git log --oneline -5
+
       - name: Run tests with coverage
         run: ./gradlew testCoverage --no-daemon
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests
+          name: codecov-test-results
+          verbose: true
+
+      - name: Debug coverage files
+        if: ${{ !cancelled() }}
+        run: |
+          echo "=== Coverage Files Debug ==="
+          find . -name "jacocoTestReport.xml" -type f
+          echo ""
+          echo "Root report content preview:"
+          if [ -f "build/reports/jacoco/test/jacocoTestReport.xml" ]; then
+            head -20 build/reports/jacoco/test/jacocoTestReport.xml
+          else
+            echo "Root report not found"
+          fi
+
+      - name: Upload coverage to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@v4
+        with:
+          directory: ./build/reports/jacoco/test/
+          files: jacocoTestReport.xml
+          flags: unittests
+          name: codecov-coverage
+          fail_ci_if_error: false
+          verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Generate test and coverage summary
         if: always()

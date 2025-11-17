@@ -9,11 +9,13 @@ coverage:
         target: auto
         threshold: 1%
         informational: true
+        if_ci_failed: error
     patch:
       default:
         target: auto
         threshold: 1%
         informational: true
+        if_ci_failed: error
 
   # Precision for coverage percentages
   precision: 2
@@ -25,8 +27,20 @@ comment:
   layout: "header, diff, flags, components, tree"
   behavior: default
   require_changes: false
-  require_base: false
+  require_base: true
   require_head: true
+  template: |
+    ## 📊 Code Coverage Report
+    {{ if .Coverage }}
+    - **Project Coverage**: {{ .Coverage }}%
+    - **Patch Coverage**: {{ .PatchCoverage }}%
+    {{ end }}
+    {{ if .Files }}
+    ### 📁 Files Changed
+    {{ range .Files }}
+    - **{{ .File }}**: {{ .Coverage }}% ({{ .LinesCovered }}/{{ .LinesTotal }} lines)
+    {{ end }}
+    {{ end }}
 
 # Annotations - show line-by-line coverage on PR diffs
 github_checks:
