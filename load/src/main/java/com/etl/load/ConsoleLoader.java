@@ -38,6 +38,8 @@ public class ConsoleLoader {
         
         if (!records.isEmpty()) {
             System.out.println("Fields per Record: " + records.get(0).length);
+        } else {
+            System.out.println("No records to summarize.");
         }
         
         System.out.println("================================");
