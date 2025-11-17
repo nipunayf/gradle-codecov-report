@@ -10,26 +10,12 @@ coverage:
         threshold: 1%
         informational: false
         if_ci_failed: error
-        paths:
-          - extract/src/main/java/
-          - transform/src/main/java/
-          - load/src/main/java/
-          - runner/src/main/java/
     patch:
       default:
         target: auto
         threshold: 1%
         informational: false
         if_ci_failed: error
-        paths:
-          - extract/src/main/java/
-          - transform/src/main/java/
-          - load/src/main/java/
-          - runner/src/main/java/
-        # Ensure we check individual files in patches
-        changes:
-          target: auto
-          threshold: 1%
 
   # Precision for coverage percentages
   precision: 2
