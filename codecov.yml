@@ -28,6 +28,10 @@ comment:
   require_base: false
   require_head: true
 
+# Annotations - show line-by-line coverage on PR diffs
+github_checks:
+  annotations: true
+
 # Flag configuration for separating test types
 flags:
   unittests:
