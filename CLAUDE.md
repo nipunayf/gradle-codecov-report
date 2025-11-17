@@ -12,7 +12,7 @@ This document provides comprehensive guidance for AI assistants working with thi
 
 **Technology Stack**:
 - **Language**: Java 11
-- **Build System**: Gradle 9.2.0
+- **Build System**: Gradle 8.5
 - **Testing Framework**: JUnit 4.13.2 (configured but not yet implemented)
 - **Architecture**: Multi-module ETL pipeline pattern
 - **License**: MIT License (Copyright 2025 Nipuna Fernando)
@@ -35,7 +35,7 @@ This document provides comprehensive guidance for AI assistants working with thi
 ├── gradle/
 │   └── wrapper/
 │       ├── gradle-wrapper.jar             # Gradle wrapper JAR
-│       └── gradle-wrapper.properties      # Gradle version: 9.2.0
+│       └── gradle-wrapper.properties      # Gradle version: 8.5
 │
 ├── extract/                               # Extract Module
 │   ├── build.gradle                       # Module build configuration
@@ -686,7 +686,7 @@ gradle :runner:run --args="custom-data.csv"
 | Dependency | Version | Scope | Module | Usage Status |
 |------------|---------|-------|--------|--------------|
 | JUnit | 4.13.2 | testImplementation | All | Configured, not used |
-| Gradle | 9.2.0 | Build Tool | N/A | Active |
+| Gradle | 8.5 | Build Tool | N/A | Active |
 
 ### Inter-Module Dependencies
 
@@ -829,7 +829,7 @@ gradle :runner:runETL
 
 - **README.md**: User-facing project documentation and usage guide
 - **LICENSE**: MIT License terms and copyright information
-- **Gradle Docs**: https://docs.gradle.org/9.2.0/userguide/userguide.html
+- **Gradle Docs**: https://docs.gradle.org/8.5/userguide/userguide.html
 - **JUnit 4 Docs**: https://junit.org/junit4/
 
 ---
