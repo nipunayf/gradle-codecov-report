@@ -37,6 +37,7 @@ public class FileExtractor {
         if (records.isEmpty()) {
             System.out.println("No records found in the file: " + filePath);
         } else if (records.size() == 2) {
+            // Line 40: This specific case is not covered by current tests
             System.out.println("Only header and one data record found in the file: " + filePath);
         }
         
