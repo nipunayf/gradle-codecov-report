@@ -31,6 +31,7 @@ comment:
 # Annotations - show line-by-line coverage on PR diffs
 github_checks:
   annotations: true
+  annotations_overall_threshold: 0
 
 # Flag configuration for separating test types
 flags:
