@@ -38,6 +38,7 @@ public class FileExtractor {
             System.out.println("No records found in the file: " + filePath);
         } else if (records.size() == 2) {
             // Line 40: This specific case is not covered by current tests
+            // TODO: Add test case for files with exactly 2 records (header + one data row)
             System.out.println("Only header and one data record found in the file: " + filePath);
         }
         
