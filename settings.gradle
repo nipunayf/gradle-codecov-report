@@ -1,0 +1,6 @@
+rootProject.name = 'etl-pipeline'
+
+include 'extract'
+include 'transform'
+include 'load'
+include 'runner'

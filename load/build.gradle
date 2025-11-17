@@ -1,0 +1,9 @@
+plugins {
+    id 'java-library'
+}
+
+description = 'Load module - Console and local DB output'
+
+dependencies {
+    implementation project(':transform')
+}

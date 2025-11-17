@@ -1,0 +1,22 @@
+plugins {
+    id 'application'
+}
+
+description = 'Runner module - Main application'
+
+dependencies {
+    implementation project(':extract')
+    implementation project(':transform')
+    implementation project(':load')
+}
+
+application {
+    mainClass = 'com.etl.runner.ETLRunner'
+}
+
+// Create a custom task to run with sample data
+tasks.register('runETL', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.etl.runner.ETLRunner'
+    args = [file('src/main/resources/sample-data.csv').absolutePath]
+}
