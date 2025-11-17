@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   test-and-coverage:
@@ -36,6 +37,27 @@ jobs:
 
       - name: Run tests with coverage
         run: ./gradlew testCoverage --no-daemon
+        continue-on-error: true
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests
+          name: codecov-test-results
+          verbose: true
+
+      - name: Upload coverage to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./build/reports/jacoco/test/jacocoTestReport.xml
+          flags: unittests
+          name: codecov-coverage
+          fail_ci_if_error: false
+          verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Generate test and coverage summary
         if: always()
