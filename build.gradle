@@ -42,6 +42,37 @@ subprojects {
             csv.required = false
         }
     }
+
+    // Custom task to validate 100% coverage for each module
+    task validateCoverage {
+        group = 'verification'
+        description = 'Validates that the module has 100% test coverage'
+        
+        dependsOn test, jacocoTestReport
+        
+        doLast {
+            def htmlReportFile = file("${buildDir}/reports/jacoco/test/html/index.html")
+            if (!htmlReportFile.exists()) {
+                throw new GradleException("JaCoCo HTML report not found: ${htmlReportFile}")
+            }
+            
+            def content = htmlReportFile.text
+            
+            // Look for coverage percentage in HTML report
+            def coverageMatcher = content =~ /<td class="ctr2">(\d+)%<\/td>/
+            if (!coverageMatcher.find()) {
+                throw new GradleException("Could not find coverage percentage in JaCoCo HTML report")
+            }
+            
+            def coveragePercent = coverageMatcher[0][1] as Integer
+            
+            println "Module ${project.name} coverage: ${coveragePercent}%"
+            
+            if (coveragePercent < 100) {
+                throw new GradleException("Coverage must be 100%. Current: ${coveragePercent}%")
+            }
+        }
+    }
 }
 
 // Aggregated coverage report for all subprojects
@@ -76,4 +107,11 @@ task testCoverage {
     group = 'verification'
     description = 'Runs tests for all modules and generates aggregated coverage report'
     dependsOn subprojects.test, jacocoRootReport
+}
+
+// Task to validate coverage for all modules
+task validateAllCoverage {
+    group = 'verification'
+    description = 'Validates 100% coverage for all modules'
+    dependsOn subprojects.validateCoverage
 }

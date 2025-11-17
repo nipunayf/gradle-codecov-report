@@ -45,19 +45,25 @@ comment:
 # Annotations - show line-by-line coverage on PR diffs
 github_checks:
   annotations: true
-  annotations_overall_threshold: 0
+  annotations_overall_threshold: 0  # Show all uncovered lines, don't require 100%
   # Enable separate Codecov check runs
   enabled: true
+  # Fail checks if coverage drops
+  fail_ci_if_error: true
 
 # Flag configuration for separating test types
 flags:
   unittests:
-    carryforward: true
+    carryforward: false
     paths:
       - extract/src/main/java/
       - transform/src/main/java/
       - load/src/main/java/
       - runner/src/main/java/
+    # Strict coverage requirements for each flag
+    target: auto
+    threshold: 0%
+    if_ci_failed: error
 
 # Ignore paths that shouldn't be counted in coverage
 ignore:
@@ -65,3 +71,9 @@ ignore:
   - "**/build/**"
   - "**/*.gradle"
   - "gradle/**"
+
+# Ensure we process all files
+codecov:
+  # Require coverage for all files, not just modified ones
+  require_base: true
+  require_head: true

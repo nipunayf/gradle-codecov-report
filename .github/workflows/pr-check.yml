@@ -58,44 +58,11 @@ jobs:
         if: ${{ !cancelled() }}
         uses: codecov/codecov-action@v4
         with:
-          files: ./build/reports/jacoco/test/jacocoTestReport.xml
-          flags: unittests
-          name: codecov-coverage
-          fail_ci_if_error: false
-          verbose: true
-          token: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          flags: unittests
-          name: codecov-test-results
-          verbose: true
-
-      - name: Debug coverage files
-        if: ${{ !cancelled() }}
-        run: |
-          echo "=== Coverage Files Debug ==="
-          find . -name "jacocoTestReport.xml" -type f
-          echo ""
-          echo "Root report content preview:"
-          if [ -f "build/reports/jacoco/test/jacocoTestReport.xml" ]; then
-            head -20 build/reports/jacoco/test/jacocoTestReport.xml
-          else
-            echo "Root report not found"
-          fi
-
-      - name: Upload coverage to Codecov
-        if: ${{ !cancelled() }}
-        uses: codecov/codecov-action@v4
-        with:
           directory: ./build/reports/jacoco/test/
           files: jacocoTestReport.xml
           flags: unittests
           name: codecov-coverage
-          fail_ci_if_error: false
+          fail_ci_if_error: true
           verbose: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
