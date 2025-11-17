@@ -71,7 +71,7 @@ public class LocalDBLoaderTest {
      */
     @Test
     public void testLoad_SingleRecord_ReturnsOneAndStoresRecord() {
-        List<String[]> records = Arrays.asList(
+        List<String[]> records = Arrays.<String[]>asList(
             new String[]{"Alice", "Williams", "28"}
         );
 
@@ -112,7 +112,7 @@ public class LocalDBLoaderTest {
      */
     @Test
     public void testGetRecord_ValidID_ReturnsCorrectRecord() {
-        List<String[]> records = Arrays.asList(
+        List<String[]> records = Arrays.<String[]>asList(
             new String[]{"John", "Doe", "30", "Engineer"}
         );
 
@@ -132,7 +132,7 @@ public class LocalDBLoaderTest {
      */
     @Test
     public void testGetRecord_InvalidID_ReturnsNull() {
-        List<String[]> records = Arrays.asList(
+        List<String[]> records = Arrays.<String[]>asList(
             new String[]{"Test", "Data"}
         );
 
@@ -147,7 +147,7 @@ public class LocalDBLoaderTest {
      */
     @Test
     public void testGetRecord_IDZero_ReturnsNull() {
-        List<String[]> records = Arrays.asList(
+        List<String[]> records = Arrays.<String[]>asList(
             new String[]{"Test", "Data"}
         );
 
@@ -162,7 +162,7 @@ public class LocalDBLoaderTest {
      */
     @Test
     public void testGetRecord_NegativeID_ReturnsNull() {
-        List<String[]> records = Arrays.asList(
+        List<String[]> records = Arrays.<String[]>asList(
             new String[]{"Test", "Data"}
         );
 
@@ -248,7 +248,7 @@ public class LocalDBLoaderTest {
         assertNull("Should not be able to retrieve old records", loader.getRecord(2));
 
         // Load new records to verify ID counter reset
-        List<String[]> newRecords = Arrays.asList(
+        List<String[]> newRecords = Arrays.<String[]>asList(
             new String[]{"New", "Record"}
         );
         loader.load(newRecords);
@@ -309,7 +309,7 @@ public class LocalDBLoaderTest {
      */
     @Test
     public void testGetRecord_ModifyingReturned_DoesNotAffectStoredData() {
-        List<String[]> records = Arrays.asList(
+        List<String[]> records = Arrays.<String[]>asList(
             new String[]{"Original", "Data"}
         );
 
@@ -377,11 +377,11 @@ public class LocalDBLoaderTest {
         LocalDBLoader loader1 = new LocalDBLoader();
         LocalDBLoader loader2 = new LocalDBLoader();
 
-        List<String[]> records1 = Arrays.asList(
+        List<String[]> records1 = Arrays.<String[]>asList(
             new String[]{"Loader1", "Data"}
         );
 
-        List<String[]> records2 = Arrays.asList(
+        List<String[]> records2 = Arrays.<String[]>asList(
             new String[]{"Loader2", "Data"}
         );
 
@@ -427,7 +427,7 @@ public class LocalDBLoaderTest {
      */
     @Test
     public void testGetAllRecords_ReturnsNewList_NotInternalReference() {
-        List<String[]> records = Arrays.asList(
+        List<String[]> records = Arrays.<String[]>asList(
             new String[]{"Test", "Data"}
         );
 
@@ -445,7 +445,7 @@ public class LocalDBLoaderTest {
      */
     @Test
     public void testLoad_MultipleCalls_EachReturnsCorrectCount() {
-        List<String[]> records1 = Arrays.asList(
+        List<String[]> records1 = Arrays.<String[]>asList(
             new String[]{"First", "Batch"}
         );
 
@@ -467,7 +467,7 @@ public class LocalDBLoaderTest {
      */
     @Test
     public void testClear_MultipleCalls_WorksCorrectly() {
-        List<String[]> records = Arrays.asList(
+        List<String[]> records = Arrays.<String[]>asList(
             new String[]{"Test", "Data"}
         );
 
@@ -486,7 +486,7 @@ public class LocalDBLoaderTest {
      */
     @Test
     public void testLoad_FieldOrder_MaintainedCorrectly() {
-        List<String[]> records = Arrays.asList(
+        List<String[]> records = Arrays.<String[]>asList(
             new String[]{"First", "Second", "Third", "Fourth", "Fifth"}
         );
 

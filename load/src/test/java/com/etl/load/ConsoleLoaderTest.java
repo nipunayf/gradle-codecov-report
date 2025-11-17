@@ -97,7 +97,7 @@ public class ConsoleLoaderTest {
      */
     @Test
     public void testLoad_SingleRecord_PrintsSingleRecord() {
-        List<String[]> records = Arrays.asList(
+        List<String[]> records = Arrays.<String[]>asList(
             new String[]{"Alice", "Williams", "28"}
         );
 
@@ -212,7 +212,7 @@ public class ConsoleLoaderTest {
      */
     @Test
     public void testLoadSummary_SingleRecord_PrintsCorrectSummary() {
-        List<String[]> records = Arrays.asList(
+        List<String[]> records = Arrays.<String[]>asList(
             new String[]{"Alice", "Williams", "28"}
         );
 
@@ -247,7 +247,7 @@ public class ConsoleLoaderTest {
      */
     @Test
     public void testLoad_MultipleCalls_EachProducesCorrectOutput() {
-        List<String[]> records1 = Arrays.asList(
+        List<String[]> records1 = Arrays.<String[]>asList(
             new String[]{"First", "Call"}
         );
 
@@ -257,7 +257,7 @@ public class ConsoleLoaderTest {
 
         resetOutput();
 
-        List<String[]> records2 = Arrays.asList(
+        List<String[]> records2 = Arrays.<String[]>asList(
             new String[]{"Second", "Call"}
         );
 
@@ -275,7 +275,7 @@ public class ConsoleLoaderTest {
         ConsoleLoader loader1 = new ConsoleLoader();
         ConsoleLoader loader2 = new ConsoleLoader();
 
-        List<String[]> records = Arrays.asList(
+        List<String[]> records = Arrays.<String[]>asList(
             new String[]{"Test", "Data"}
         );
 
@@ -336,7 +336,7 @@ public class ConsoleLoaderTest {
      */
     @Test
     public void testLoad_DoesNotModifyInputList() {
-        List<String[]> records = new ArrayList<>(Arrays.asList(
+        List<String[]> records = new ArrayList<>(Arrays.<String[]>asList(
             new String[]{"Test", "Data"}
         ));
         int originalSize = records.size();
