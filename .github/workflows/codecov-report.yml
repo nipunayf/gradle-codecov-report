@@ -45,6 +45,13 @@ jobs:
           name: codecov-test-results
           verbose: true
 
+      - name: Validate 100% Coverage
+        if: ${{ !cancelled() }}
+        run: |
+          echo "=== Validating 100% Coverage ==="
+          # Run our custom validation task
+          ./gradlew validateAllCoverage --no-daemon
+
       - name: Upload coverage to Codecov
         if: ${{ !cancelled() }}
         uses: codecov/codecov-action@v4
@@ -56,29 +63,6 @@ jobs:
           fail_ci_if_error: true
           verbose: true
           token: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Check for uncovered lines
-        if: ${{ !cancelled() }}
-        run: |
-          echo "=== Checking for uncovered lines ==="
-          # Check if any module has less than 100% coverage
-          for module in extract transform load runner; do
-            if [ -f "${module}/build/reports/jacoco/test/jacocoTestReport.xml" ]; then
-              echo "Checking ${module} module coverage..."
-              # Parse XML to get coverage percentage (simplified check)
-              COVERAGE=$(grep -o 'line-rate="[^"]*"' "${module}/build/reports/jacoco/test/jacocoTestReport.xml" | head -1 | cut -d'"' -f2)
-              COVERAGE_PCT=$(echo "$COVERAGE * 100" | bc -l 2>/dev/null || echo "0")
-              echo "${module} coverage: ${COVERAGE_PCT}%"
-              
-              # Fail if coverage is less than 100%
-              if (( $(echo "$COVERAGE_PCT < 100" | bc -l) )); then
-                echo "❌ ${module} has less than 100% coverage (${COVERAGE_PCT}%)"
-                exit 1
-              else
-                echo "✅ ${module} has 100% coverage"
-              fi
-            fi
-          done
 
       - name: Generate test and coverage summary
         if: always()
