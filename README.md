@@ -123,6 +123,40 @@ gradle build --info
 gradle build --configuration-cache
 ```
 
+## Testing
+
+### Running Tests
+
+Run all tests:
+```bash
+gradle test
+```
+
+Run tests for a specific module:
+```bash
+gradle :extract:test
+```
+
+Run tests with coverage report:
+```bash
+gradle testCoverage
+```
+
+### Test Coverage
+
+This project uses JaCoCo for code coverage analysis and integrates with Codecov for:
+- **Code Coverage Tracking**: Monitors test coverage across all modules
+- **Test Analytics**: Tracks test execution, failures, and flaky tests
+
+Coverage reports are generated at:
+- **HTML Report**: `build/reports/jacoco/test/html/index.html`
+- **XML Report**: `build/reports/jacoco/test/jacocoTestReport.xml`
+
+Test results are generated at:
+- `<module>/build/test-results/test/` (JUnit XML format)
+
+[![codecov](https://codecov.io/gh/nipunayf/gradle-codecov-report/graph/badge.svg)](https://codecov.io/gh/nipunayf/gradle-codecov-report)
+
 ## CSV File Format
 
 The pipeline expects CSV files with comma-separated values:

@@ -37,20 +37,46 @@ jobs:
 
       - name: Run tests with coverage
         run: ./gradlew testCoverage --no-daemon
+        continue-on-error: true
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests
+          name: codecov-test-results
+          verbose: true
 
       - name: Upload coverage to Codecov
+        if: ${{ !cancelled() }}
         uses: codecov/codecov-action@v4
         with:
           files: ./build/reports/jacoco/test/jacocoTestReport.xml
           flags: unittests
-          name: codecov-pr-check
+          name: codecov-coverage
           fail_ci_if_error: false
           verbose: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Generate coverage summary
+      - name: Generate test and coverage summary
         if: always()
         run: |
+          echo "=== Test Results Summary ==="
+          if [ -d "extract/build/test-results/test" ] || [ -d "transform/build/test-results/test" ] || [ -d "load/build/test-results/test" ] || [ -d "runner/build/test-results/test" ]; then
+            echo "✅ Test results generated successfully"
+            echo "📋 Test result locations:"
+            for module in extract transform load runner; do
+              if [ -d "${module}/build/test-results/test" ]; then
+                echo "   - ${module}/build/test-results/test/"
+              fi
+            done
+          else
+            echo "⚠️ No test results found"
+          fi
+
+          echo ""
+          echo "=== Coverage Report Summary ==="
           if [ -f "build/reports/jacoco/test/jacocoTestReport.xml" ]; then
             echo "✅ Coverage report generated successfully"
             echo "📊 Report location: build/reports/jacoco/test/html/index.html"

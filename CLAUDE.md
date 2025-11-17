@@ -13,7 +13,10 @@ This document provides comprehensive guidance for AI assistants working with thi
 **Technology Stack**:
 - **Language**: Java 11
 - **Build System**: Gradle 8.5
-- **Testing Framework**: JUnit 4.13.2 (configured but not yet implemented)
+- **Testing Framework**: JUnit 4.13.2 (extract module has 15 comprehensive tests)
+- **Code Coverage**: JaCoCo 0.8.11
+- **CI/CD**: GitHub Actions with Codecov integration
+- **Analytics**: Codecov (code coverage + test analytics)
 - **Architecture**: Multi-module ETL pipeline pattern
 - **License**: MIT License (Copyright 2025 Nipuna Fernando)
 
@@ -24,7 +27,11 @@ This document provides comprehensive guidance for AI assistants working with thi
 ```
 /home/user/gradle-codecov-report/
 ├── .git/                                  # Git repository metadata
+├── .github/
+│   └── workflows/
+│       └── pr-check.yml                   # CI/CD workflow with Codecov integration
 ├── .gitignore                             # Git ignore configuration
+├── codecov.yml                            # Codecov configuration
 ├── LICENSE                                # MIT License file
 ├── README.md                              # User-facing project documentation
 ├── CLAUDE.md                              # This file - AI assistant guide
@@ -39,8 +46,12 @@ This document provides comprehensive guidance for AI assistants working with thi
 │
 ├── extract/                               # Extract Module
 │   ├── build.gradle                       # Module build configuration
-│   └── src/main/java/com/etl/extract/
-│       └── FileExtractor.java             # CSV file reading (50 lines)
+│   ├── src/main/java/com/etl/extract/
+│   │   └── FileExtractor.java             # CSV file reading (50 lines)
+│   └── src/test/
+│       ├── java/com/etl/extract/
+│       │   └── FileExtractorTest.java     # Unit tests (15 test cases, 249 lines)
+│       └── resources/                     # Test CSV files (5 files)
 │
 ├── transform/                             # Transform Module
 │   ├── build.gradle                       # Module build configuration
@@ -498,14 +509,34 @@ git pull origin <branch-name>
 4. Follow naming: `testMethodName_Scenario_ExpectedBehavior()`
 5. Run with `gradle test`
 
-### 3. Adding Code Coverage (Project Goal)
+### 3. Code Coverage and Test Analytics (Implemented)
 
-**Expected Steps** (based on repository name):
-1. Add Jacoco plugin to `build.gradle`
-2. Configure Jacoco for all subprojects
-3. Generate coverage reports: `gradle jacocoTestReport`
-4. Integrate with Codecov (add `.codecov.yml`)
-5. Add coverage badge to README.md
+**Current Implementation**:
+1. ✅ JaCoCo plugin configured in `build.gradle`
+2. ✅ JaCoCo configured for all subprojects (version 0.8.11)
+3. ✅ Coverage reports generated automatically: `gradle testCoverage`
+4. ✅ Codecov integration with `codecov.yml` configuration
+5. ✅ Coverage badge added to README.md
+6. ✅ Test Analytics integration via GitHub Actions
+
+**Codecov Features**:
+- **Code Coverage**: Tracks coverage across all modules with aggregated reports
+- **Test Analytics**: Monitors test execution, failures, and flaky tests
+- **PR Comments**: Automatic coverage and test result comments on pull requests
+
+**Running Coverage**:
+```bash
+# Generate coverage for all modules
+gradle testCoverage
+
+# View HTML report
+open build/reports/jacoco/test/html/index.html
+```
+
+**GitHub Actions Integration**:
+- Uploads test results (JUnit XML) to Codecov Test Analytics
+- Uploads code coverage reports (JaCoCo XML) to Codecov
+- Runs on all pull requests to main, master, and develop branches
 
 ### 4. Modifying ETL Logic
 
@@ -599,14 +630,13 @@ Henry,Taylor,26,Analyst
 
 ### Current Limitations
 
-1. **No Tests**: JUnit is configured but no test files exist yet
-2. **No Code Coverage**: Repository name suggests this is a goal, not implemented
-3. **CSV Only**: Only supports comma-separated values (no TSV, JSON, XML)
-4. **No Escaping**: CSV parser doesn't handle quoted fields or escaped commas
-5. **In-Memory Only**: `LocalDBLoader` is not persistent (data lost on exit)
-6. **Single-Threaded**: Not designed for concurrent access
-7. **No Validation**: No schema validation for CSV data
-8. **No Error Recovery**: Pipeline stops on first error
+1. **Partial Test Coverage**: Only extract module has comprehensive tests (15 test cases). Transform, load, and runner modules need test implementation.
+2. **CSV Only**: Only supports comma-separated values (no TSV, JSON, XML)
+3. **No Escaping**: CSV parser doesn't handle quoted fields or escaped commas
+4. **In-Memory Only**: `LocalDBLoader` is not persistent (data lost on exit)
+5. **Single-Threaded**: Not designed for concurrent access
+6. **No Validation**: No schema validation for CSV data
+7. **No Error Recovery**: Pipeline stops on first error
 
 ### Thread Safety
 
@@ -843,7 +873,7 @@ gradle :runner:runETL
 - `92c2b76`: Initial plan
 - `846d4d7`: Initial commit
 
-**Current State**: Basic ETL pipeline implemented, ready for code coverage integration
+**Current State**: ETL pipeline with JaCoCo code coverage, Codecov integration (coverage + test analytics), and comprehensive unit tests for extract module
 
 ---
 
