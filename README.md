@@ -148,12 +148,43 @@ This project uses JaCoCo for code coverage analysis and integrates with Codecov 
 - **Code Coverage Tracking**: Monitors test coverage across all modules
 - **Test Analytics**: Tracks test execution, failures, and flaky tests
 
+## 📊 Coverage Requirements
+
+⚠️ **Strict Coverage Policy**: This project enforces **100% line coverage** for all modules. Any PR with uncovered lines will fail CI checks.
+
+### What gets enforced:
+- ✅ **100% line coverage** for all Java source files
+- ✅ **Zero uncovered lines** in new patches
+- ✅ **Per-module validation** - each module must have 100% coverage
+- ✅ **GitHub annotations** show uncovered lines in PR diffs
+- ✅ **Automated CI failures** when coverage drops below 100%
+
+### How to check coverage locally:
+```bash
+# Run tests with coverage
+gradle testCoverage
+
+# Validate 100% coverage (fails if any uncovered lines)
+gradle validateAllCoverage
+
+# Check specific module coverage
+gradle :extract:validateCoverage
+```
+
 Coverage reports are generated at:
 - **HTML Report**: `build/reports/jacoco/test/html/index.html`
 - **XML Report**: `build/reports/jacoco/test/jacocoTestReport.xml`
+- **Module Reports**: `<module>/build/reports/jacoco/test/html/`
 
 Test results are generated at:
 - `<module>/build/test-results/test/` (JUnit XML format)
+
+### Viewing Uncovered Lines
+To see exactly which lines are uncovered:
+```bash
+# Open the HTML report for a specific module
+open extract/build/reports/jacoco/test/html/com.etl.extract/FileExtractor.java.html
+```
 
 [![codecov](https://codecov.io/gh/nipunayf/gradle-codecov-report/graph/badge.svg)](https://codecov.io/gh/nipunayf/gradle-codecov-report)
 
