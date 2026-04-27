@@ -61,6 +61,7 @@ public class DataTransformer {
         } else {
             System.out.println("Total records: " + count);
         }
+        System.out.println("Aggregation completed.");
         return count;
     }
 }
