@@ -49,14 +49,23 @@ github_checks:
   # Enable separate Codecov check runs
   enabled: true
 
-# Flag configuration for separating test types
+# Flag configuration for separating Gradle submodules
 flags:
-  unittests:
+  extract:
     carryforward: true
     paths:
       - extract/src/main/java/
+  transform:
+    carryforward: true
+    paths:
       - transform/src/main/java/
+  load:
+    carryforward: true
+    paths:
       - load/src/main/java/
+  runner:
+    carryforward: true
+    paths:
       - runner/src/main/java/
 
 # Ignore paths that shouldn't be counted in coverage

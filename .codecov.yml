@@ -30,13 +30,22 @@ comment:
   show_carryforward_flags: false
 
 flags:
-  unittests:
+  extract:
     paths:
       - extract/src/main/java/
+    carryforward: true
+  transform:
+    paths:
       - transform/src/main/java/
+    carryforward: true
+  load:
+    paths:
       - load/src/main/java/
+    carryforward: true
+  runner:
+    paths:
       - runner/src/main/java/
-    carryforward: false
+    carryforward: true
 
 ignore:
   - "**/*Test.java"

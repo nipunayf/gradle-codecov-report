@@ -16,6 +16,7 @@ jobs:
 
     steps:
       - name: Checkout code
+        if: ${{ env.ACT != 'true' }}
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Fetch all history for accurate coverage comparison
@@ -36,6 +37,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Fetch base branch for comparison
+        if: ${{ env.ACT != 'true' }}
         run: |
           git fetch origin ${{ github.base_ref }} --depth=1
           echo "Base branch: ${{ github.base_ref }}"
@@ -46,27 +48,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          flags: unittests
-          name: codecov-test-results
-          verbose: true
-
-      - name: Upload coverage to Codecov
-        if: ${{ !cancelled() }}
-        uses: codecov/codecov-action@v4
-        with:
-          files: ./build/reports/jacoco/test/jacocoTestReport.xml
-          flags: unittests
-          name: codecov-coverage
-          fail_ci_if_error: false
-          verbose: true
-          token: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && env.ACT != 'true' }}
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -87,14 +69,58 @@ jobs:
             echo "Root report not found"
           fi
 
-      - name: Upload coverage to Codecov
+      - name: Upload extract coverage to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
-          directory: ./build/reports/jacoco/test/
-          files: jacocoTestReport.xml
-          flags: unittests
-          name: codecov-coverage
+          files: ./extract/build/reports/jacoco/codecov/jacocoTestReport.xml
+          flags: extract
+          name: codecov-extract
+          network_prefix: extract/src/main/java
+          disable_search: true
+          dry_run: ${{ env.ACT == 'true' }}
+          fail_ci_if_error: false
+          verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload transform coverage to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./transform/build/reports/jacoco/codecov/jacocoTestReport.xml
+          flags: transform
+          name: codecov-transform
+          network_prefix: transform/src/main/java
+          disable_search: true
+          dry_run: ${{ env.ACT == 'true' }}
+          fail_ci_if_error: false
+          verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload load coverage to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./load/build/reports/jacoco/codecov/jacocoTestReport.xml
+          flags: load
+          name: codecov-load
+          network_prefix: load/src/main/java
+          disable_search: true
+          dry_run: ${{ env.ACT == 'true' }}
+          fail_ci_if_error: false
+          verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload runner coverage to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./runner/build/reports/jacoco/codecov/jacocoTestReport.xml
+          flags: runner
+          name: codecov-runner
+          network_prefix: runner/src/main/java
+          disable_search: true
+          dry_run: ${{ env.ACT == 'true' }}
           fail_ci_if_error: false
           verbose: true
           token: ${{ secrets.CODECOV_TOKEN }}

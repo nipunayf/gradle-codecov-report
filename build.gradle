@@ -44,18 +44,16 @@ subprojects {
     }
 }
 
+def testTasks = subprojects.collect { it.tasks.named('test') }
+def jacocoExecutionData = files(subprojects.collect { fileTree(it.buildDir).include("jacoco/test.exec") })
+
 // Aggregated coverage report for all subprojects
-task jacocoRootReport(type: JacocoReport) {
-    dependsOn = subprojects.test
+tasks.register('jacocoRootReport', JacocoReport) {
+    dependsOn testTasks
 
-    // Gather execution data from all subprojects that actually have tests
-    def executionDataFiles = fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-    executionData = executionDataFiles
-
-    // Add source files from all subprojects
-    subprojects.each {
-        sourceSets it.sourceSets.main
-    }
+    executionData.from(jacocoExecutionData)
+    sourceDirectories.from(subprojects.collect { it.sourceSets.main.allSource.srcDirs })
+    classDirectories.from(subprojects.collect { it.sourceSets.main.output })
 
     reports {
         xml.required = true
@@ -71,9 +69,35 @@ task jacocoRootReport(type: JacocoReport) {
     }
 }
 
-// Task to run tests and generate aggregated coverage report
-task testCoverage {
+subprojects { subproject ->
+    subproject.tasks.register('codecovJacocoReport', JacocoReport) {
+        group = 'verification'
+        description = "Generates the JaCoCo XML report uploaded to Codecov for the ${subproject.name} module"
+        dependsOn testTasks
+
+        executionData.from(jacocoExecutionData)
+        sourceDirectories.from(subproject.sourceSets.main.allSource.srcDirs)
+        classDirectories.from(subproject.sourceSets.main.output)
+
+        reports {
+            xml.required = true
+            xml.outputLocation = subproject.layout.buildDirectory.file("reports/jacoco/codecov/jacocoTestReport.xml")
+            html.required = true
+            html.outputLocation = subproject.layout.buildDirectory.dir("reports/jacoco/codecov/html")
+            csv.required = false
+        }
+    }
+}
+
+tasks.register('jacocoCodeCovReports') {
     group = 'verification'
-    description = 'Runs tests for all modules and generates aggregated coverage report'
-    dependsOn subprojects.test, jacocoRootReport
+    description = 'Generates one JaCoCo XML report per Gradle submodule for Codecov flagged uploads'
+    dependsOn subprojects.collect { it.tasks.named('codecovJacocoReport') }
+}
+
+// Task to run tests and generate aggregated coverage report
+tasks.register('testCoverage') {
+    group = 'verification'
+    description = 'Runs tests for all modules and generates aggregated and per-module coverage reports'
+    dependsOn testTasks, tasks.named('jacocoRootReport'), tasks.named('jacocoCodeCovReports')
 }
