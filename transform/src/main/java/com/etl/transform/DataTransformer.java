@@ -56,6 +56,11 @@ public class DataTransformer {
      */
     public int aggregateCount(List<String[]> records) {
         int count = records.size();
+        if (count == 0) {
+            System.out.println("No records to aggregate.");
+        } else {
+            System.out.println("Total records: " + count);
+        }
         return count;
     }
 }
