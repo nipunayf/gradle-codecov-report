@@ -55,6 +55,7 @@ public class DataTransformer {
      * @return count of records
      */
     public int aggregateCount(List<String[]> records) {
-        return records.size();
+        int count = records.size();
+        return count;
     }
 }
