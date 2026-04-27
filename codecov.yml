@@ -34,6 +34,12 @@ comment:
 github_checks:
   annotations: true
 
+fixes:
+  - "com/etl/extract/::extract/src/main/java/com/etl/extract/"
+  - "com/etl/transform/::transform/src/main/java/com/etl/transform/"
+  - "com/etl/load/::load/src/main/java/com/etl/load/"
+  - "com/etl/runner/::runner/src/main/java/com/etl/runner/"
+
 # Flag configuration for separating Gradle submodules
 flags:
   extract:
