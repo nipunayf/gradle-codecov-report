@@ -29,25 +29,16 @@ comment:
   require_changes: false
   require_base: true
   require_head: true
-  template: |
-    ## 📊 Code Coverage Report
-    {{ if .Coverage }}
-    - **Project Coverage**: {{ .Coverage }}%
-    - **Patch Coverage**: {{ .PatchCoverage }}%
-    {{ end }}
-    {{ if .Files }}
-    ### 📁 Files Changed
-    {{ range .Files }}
-    - **{{ .File }}**: {{ .Coverage }}% ({{ .LinesCovered }}/{{ .LinesTotal }} lines)
-    {{ end }}
-    {{ end }}
 
 # Annotations - show line-by-line coverage on PR diffs
 github_checks:
   annotations: true
-  annotations_overall_threshold: 0
-  # Enable separate Codecov check runs
-  enabled: true
+
+fixes:
+  - "com/etl/extract/::extract/src/main/java/com/etl/extract/"
+  - "com/etl/transform/::transform/src/main/java/com/etl/transform/"
+  - "com/etl/load/::load/src/main/java/com/etl/load/"
+  - "com/etl/runner/::runner/src/main/java/com/etl/runner/"
 
 # Flag configuration for separating Gradle submodules
 flags:

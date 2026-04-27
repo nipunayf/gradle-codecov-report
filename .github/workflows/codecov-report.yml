@@ -53,7 +53,6 @@ jobs:
           files: ./extract/build/reports/jacoco/codecov/jacocoTestReport.xml
           flags: extract
           name: codecov-extract
-          network_prefix: extract/src/main/java
           disable_search: true
           dry_run: ${{ env.ACT == 'true' }}
           fail_ci_if_error: false
@@ -67,7 +66,6 @@ jobs:
           files: ./transform/build/reports/jacoco/codecov/jacocoTestReport.xml
           flags: transform
           name: codecov-transform
-          network_prefix: transform/src/main/java
           disable_search: true
           dry_run: ${{ env.ACT == 'true' }}
           fail_ci_if_error: false
@@ -81,7 +79,6 @@ jobs:
           files: ./load/build/reports/jacoco/codecov/jacocoTestReport.xml
           flags: load
           name: codecov-load
-          network_prefix: load/src/main/java
           disable_search: true
           dry_run: ${{ env.ACT == 'true' }}
           fail_ci_if_error: false
@@ -95,7 +92,6 @@ jobs:
           files: ./runner/build/reports/jacoco/codecov/jacocoTestReport.xml
           flags: runner
           name: codecov-runner
-          network_prefix: runner/src/main/java
           disable_search: true
           dry_run: ${{ env.ACT == 'true' }}
           fail_ci_if_error: false
